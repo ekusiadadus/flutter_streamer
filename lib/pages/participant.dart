@@ -3,6 +3,7 @@ import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtm/agora_rtm.dart';
 import 'package:flutter/material.dart';
+import 'package:streamer/models/user.dart';
 import 'package:streamer/utils/const.dart';
 
 class Participant extends StatefulWidget {
@@ -22,7 +23,7 @@ class Participant extends StatefulWidget {
 }
 
 class _ParticipantState extends State<Participant> {
-  List<int> _users = [];
+  List<AgoraUser> _users = [];
 
   // Agora API Documentation
   // https://docs.agora.io/en/rtc/restfulapi/#/
@@ -66,7 +67,7 @@ class _ParticipantState extends State<Participant> {
       RtcEngineEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
         setState(
           () {
-            _users.add(uid);
+            _users.add(AgoraUser(uid: uid));
           },
         );
       }, leaveChannel: (stats) {
