@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Director extends StatefulWidget {
-  const Director({Key? key}) : super(key: key);
+  final String channelName;
+  const Director({
+    Key? key,
+    required this.channelName,
+  }) : super(key: key);
 
   @override
   State<Director> createState() => _DirectorState();

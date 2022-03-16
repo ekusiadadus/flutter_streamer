@@ -2,17 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:streamer/pages/home.dart';
 
-class EnvironmentConfig {
-  static const agoraId = String.fromEnvironment(
-    'AGORA_ID',
-    defaultValue: 'AGORA_ID',
-  );
-  static const agoraChannelName = String.fromEnvironment(
-    'AGORA_CHANNEL_NAME',
-    defaultValue: 'test',
-  );
-}
-
 void main() {
   runApp(const MyApp());
 }
