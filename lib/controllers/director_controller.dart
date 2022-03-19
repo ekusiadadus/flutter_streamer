@@ -1,7 +1,9 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtm/agora_rtm.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:streamer/models/director_model.dart';
+import 'package:streamer/models/user.dart';
 import 'package:streamer/utils/const.dart';
 
 final directorController =
@@ -30,11 +32,15 @@ class DirectorController extends StateNotifier<DirectorModel> {
 
     //Callback for the RtC Engine
     state.engine?.setEventHandler(
-      RtcEngineEventHandler(
-          joinChannelSuccess: (channel, uid, elapsed) {
-            print("Director $uid");
-          },
-          leaveChannel: (stats) {}),
+      RtcEngineEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
+        print("Director $uid");
+      }, leaveChannel: (stats) {
+        print("Channel Left");
+      }, userJoined: (uid, elapsed) {
+        print("User Joined " + uid.toString());
+      }, userOffline: (uid, reason) {
+        removeUser(uid: uid);
+      }),
     );
 
     //Callback for the RtC Client
@@ -55,6 +61,7 @@ class DirectorController extends StateNotifier<DirectorModel> {
       }
     };
 
+    print(uid.toString());
     // Join the RTM and RTC channels
     await state.client?.login(null, uid.toString());
     state =
@@ -82,5 +89,33 @@ class DirectorController extends StateNotifier<DirectorModel> {
     state.channel?.leave();
     state.client?.logout();
     state.client?.destroy();
+  }
+
+  Future<void> addUserToLobby({required int uid}) async {
+    state = state.copyWith(lobbyUsers: {
+      ...state.lobbyUsers,
+      AgoraUser(
+        uid: uid,
+        muted: true,
+        videoDisabled: true,
+        name: "todo",
+        backgroundColor: Colors.blue,
+      )
+    });
+  }
+
+  Future<void> removeUser({required int uid}) async {
+    Set<AgoraUser> _tempActive = state.activeUsers;
+    Set<AgoraUser> _tempLobby = state.lobbyUsers;
+    for (int i = 0; i < _tempActive.length; ++i) {
+      if (_tempActive.elementAt(i).uid == uid) {
+        _tempActive.remove(_tempActive.elementAt(i));
+      }
+      for (int i = 0; i < _tempLobby.length; ++i) {
+        if (_tempLobby.elementAt(i).uid == uid) {
+          _tempLobby.remove(_tempLobby.elementAt(i));
+        }
+      }
+    }
   }
 }
