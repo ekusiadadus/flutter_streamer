@@ -94,7 +94,6 @@ class _ParticipantState extends State<Participant> {
         print("Logged out from Streameer.");
       }
     };
-
     // Join the RTM and RTC channels
     await _client?.login(null, widget.uid.toString());
     _channel = await _client?.createChannel(widget.channelName);
