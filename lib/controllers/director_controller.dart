@@ -61,7 +61,6 @@ class DirectorController extends StateNotifier<DirectorModel> {
       }
     };
 
-    print(uid.toString());
     // Join the RTM and RTC channels
     await state.client?.login(null, uid.toString());
     state =
