@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: deprecated_member_use
 import 'package:flutter_riverpod/all.dart';
 import 'package:streamer/controllers/director_controller.dart';
 import 'package:streamer/models/director_model.dart';
