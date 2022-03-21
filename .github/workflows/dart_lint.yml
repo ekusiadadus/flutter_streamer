@@ -1,11 +1,5 @@
 on:
   pull_request:
-    paths:
-      - '**.dart'
-      - 'pubspec.*'
-      - 'analysis_options.yaml'
-      - '.github/workflows/flutter_ci.yaml'
-      - '.codecov.yml'
   push:
     branches: [mster]
     paths:
