@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
       int time = DateTime.now().millisecondsSinceEpoch;
       uid = int.parse(time.toString().substring(1, time.toString().length - 3));
       preferences.setInt("localUid", uid);
-      print("settingUID: $uid");
+      // print("settingUID: $uid");
     }
   }
 
@@ -83,7 +83,6 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            TextField(),
             TextButton(
               onPressed: () async {
                 //take us to participant
