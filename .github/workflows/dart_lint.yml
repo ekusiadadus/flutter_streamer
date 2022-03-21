@@ -7,7 +7,7 @@ on:
       - '.github/workflows/flutter_ci.yaml'
       - '.codecov.yml'
   push:
-    branches: [main]
+    branches: [mster]
     paths:
       - '**.dart'
       - 'pubspec.*'
