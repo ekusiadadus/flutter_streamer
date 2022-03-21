@@ -1,0 +1,45 @@
+on:
+  pull_request:
+  push:
+    branches: [mster]
+    paths:
+      - '**.dart'
+      - 'pubspec.*'
+      - 'analysis_options.yaml'
+      - '.github/workflows/flutter_ci.yaml'
+      - '.codecov.yml'
+
+jobs:
+  format:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+      - run: flutter format -l 120 --set-exit-if-changed .
+
+  analyze:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+      - name: install dependencies
+        run: flutter pub get
+      - run: flutter analyze --fatal-infos --fatal-warnings .
+
+  widget_test:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+      - name: doctor
+        run: flutter doctor -v
+      - name: install dependencies
+        run: flutter pub get
+      - name: run test
+        run: flutter test --coverage --coverage-path=./coverage/lcov.info
+      - uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./coverage/lcov.info

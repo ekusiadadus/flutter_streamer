@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:streamer/controllers/director_controller.dart';
 import 'package:streamer/models/director_model.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_remote_view.dart';
 
 class Director extends StatefulWidget {
   final String channelName;
@@ -23,18 +22,14 @@ class _DirectorState extends State<Director> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(directorController.notifier)
-        .joinCall(channelName: widget.channelName, uid: widget.uid);
+    context.read(directorController.notifier).joinCall(channelName: widget.channelName, uid: widget.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (BuildContext context,
-          T Function<T>(ProviderBase<Object?, T>) watch, Widget? child) {
-        DirectorController directorNotifier =
-            watch(directorController.notifier);
+      builder: (BuildContext context, T Function<T>(ProviderBase<Object?, T>) watch, Widget? child) {
+        DirectorController directorNotifier = watch(directorController.notifier);
         DirectorModel directorData = watch(directorController);
         Size size = MediaQuery.of(context).size;
         return Scaffold(
@@ -70,10 +65,8 @@ class _DirectorState extends State<Director> {
                     return Row(
                       children: [
                         Expanded(
-                          child: StageUser(
-                              directorData: directorData,
-                              directorNotifier: directorNotifier,
-                              index: index),
+                          child:
+                              StageUser(directorData: directorData, directorNotifier: directorNotifier, index: index),
                         ),
                       ],
                     );
@@ -81,9 +74,7 @@ class _DirectorState extends State<Director> {
                   childCount: directorData.activeUsers.length,
                 ),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: size.width / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                    maxCrossAxisExtent: size.width / 2, crossAxisSpacing: 20, mainAxisSpacing: 20),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
@@ -105,10 +96,8 @@ class _DirectorState extends State<Director> {
                     return Row(
                       children: [
                         Expanded(
-                          child: LobbyUser(
-                              directorData: directorData,
-                              directorNotifier: directorNotifier,
-                              index: index),
+                          child:
+                              LobbyUser(directorData: directorData, directorNotifier: directorNotifier, index: index),
                         ),
                       ],
                     );
@@ -116,9 +105,7 @@ class _DirectorState extends State<Director> {
                   childCount: directorData.activeUsers.length,
                 ),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: size.width / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                    maxCrossAxisExtent: size.width / 2, crossAxisSpacing: 20, mainAxisSpacing: 20),
               ),
             ],
           ),
@@ -142,85 +129,70 @@ class StageUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: directorData.activeUsers.elementAt(index).videoDisabled
-                ? Stack(
-                    children: [
-                      Container(
-                        color: (directorData.lobbyUsers
-                                    .elementAt(index)
-                                    .backgroundColor !=
-                                null)
-                            ? directorData.lobbyUsers
-                                .elementAt(index)
-                                .backgroundColor!
-                                .withOpacity(1)
-                            : Colors.black,
-                      ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Video Off",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: directorData.activeUsers.elementAt(index).videoDisabled
+              ? Stack(
+                  children: [
+                    Container(
+                      color: (directorData.lobbyUsers.elementAt(index).backgroundColor != null)
+                          ? directorData.lobbyUsers.elementAt(index).backgroundColor!.withOpacity(1)
+                          : Colors.black,
+                    ),
+                    const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Video Off",
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-                      )
-                    ],
-                  )
-                : RtcRemoteView.SurfaceView(
-                    uid: directorData.lobbyUsers.elementAt(index).uid,
-                  ),
+                      ),
+                    )
+                  ],
+                )
+              : SurfaceView(
+                  uid: directorData.lobbyUsers.elementAt(index).uid,
+                ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black54,
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.black54,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    if (directorData.activeUsers.elementAt(index).muted) {
-                    } else {}
-                  },
-                  icon: const Icon(Icons.mic_off),
-                  color: directorData.activeUsers.elementAt(index).muted
-                      ? Colors.red
-                      : Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  if (directorData.activeUsers.elementAt(index).muted) {
+                  } else {}
+                },
+                icon: const Icon(Icons.mic_off),
+                color: directorData.activeUsers.elementAt(index).muted ? Colors.red : Colors.white,
+              ),
+              IconButton(
+                onPressed: () {
+                  if (directorData.activeUsers.elementAt(index).videoDisabled) {
+                  } else {}
+                },
+                icon: const Icon(Icons.videocam_off),
+                color: directorData.activeUsers.elementAt(index).videoDisabled ? Colors.red : Colors.white,
+              ),
+              IconButton(
+                onPressed: () {
+                  directorNotifier.demoteToLobbyUser(uid: directorData.activeUsers.elementAt(index).uid);
+                },
+                icon: const Icon(
+                  Icons.arrow_downward,
+                  color: Colors.white,
                 ),
-                IconButton(
-                  onPressed: () {
-                    if (directorData.activeUsers
-                        .elementAt(index)
-                        .videoDisabled) {
-                    } else {}
-                  },
-                  icon: const Icon(Icons.videocam_off),
-                  color: directorData.activeUsers.elementAt(index).videoDisabled
-                      ? Colors.red
-                      : Colors.white,
-                ),
-                IconButton(
-                  onPressed: () {
-                    directorNotifier.demoteToLobbyUser(
-                        uid: directorData.activeUsers.elementAt(index).uid);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_downward,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -246,38 +218,29 @@ class LobbyUser extends StatelessWidget {
           child: directorData.lobbyUsers.elementAt(index).videoDisabled
               ? Stack(children: [
                   Container(
-                    color: (directorData.lobbyUsers
-                                .elementAt(index)
-                                .backgroundColor !=
-                            null)
-                        ? directorData.lobbyUsers
-                            .elementAt(index)
-                            .backgroundColor!
-                            .withOpacity(1)
+                    color: (directorData.lobbyUsers.elementAt(index).backgroundColor != null)
+                        ? directorData.lobbyUsers.elementAt(index).backgroundColor!.withOpacity(1)
                         : Colors.black,
                   ),
                   Align(
                       alignment: Alignment.center,
                       child: Text(
-                        directorData.lobbyUsers.elementAt(index).name ??
-                            "error name",
+                        directorData.lobbyUsers.elementAt(index).name ?? "error name",
                         style: const TextStyle(color: Colors.white),
                       )),
                 ])
-              : RtcRemoteView.SurfaceView(
+              : SurfaceView(
                   uid: directorData.lobbyUsers.elementAt(index).uid,
                 ),
         ),
         Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: Colors.black54),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.black54),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 onPressed: () {
-                  directorNotifier.promoteToActiveUser(
-                      uid: directorData.lobbyUsers.elementAt(index).uid);
+                  directorNotifier.promoteToActiveUser(uid: directorData.lobbyUsers.elementAt(index).uid);
                 },
                 icon: const Icon(Icons.arrow_upward),
                 color: Colors.white,

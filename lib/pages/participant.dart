@@ -1,6 +1,5 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart';
 import 'package:agora_rtm/agora_rtm.dart';
 import 'package:flutter/material.dart';
 import 'package:streamer/models/user.dart';
@@ -23,7 +22,7 @@ class Participant extends StatefulWidget {
 }
 
 class _ParticipantState extends State<Participant> {
-  List<AgoraUser> _users = [];
+  final List<AgoraUser> _users = [];
 
   // Agora API Documentation
   // https://docs.agora.io/en/rtc/restfulapi/#/
@@ -54,8 +53,7 @@ class _ParticipantState extends State<Participant> {
   }
 
   Future<void> initializeAgora() async {
-    _engine = await RtcEngine.createWithContext(
-        RtcEngineContext(EnvironmentConfig.agoraId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(EnvironmentConfig.agoraId));
     _client = await AgoraRtmClient.createInstance(EnvironmentConfig.agoraId);
 
     await _engine.enableVideo();
@@ -79,19 +77,16 @@ class _ParticipantState extends State<Participant> {
 
     //Callback for the RtC Client
     _client?.onMessageReceived = (AgoraRtmMessage message, String peerId) {
-      print("Private Message from " + peerId + ": " + (message.text));
+      // print("Private Message from " + peerId + ": " + (message.text));
     };
 
     _client?.onConnectionStateChanged = (int state, int reason) {
-      print("Connection state changed: " +
-          state.toString() +
-          ", reason: " +
-          reason.toString());
+      // print("Connection state changed: " + state.toString() + ", reason: " + reason.toString());
       if (state == 5) {
         _channel?.leave();
         _client?.logout();
         _client?.destroy();
-        print("Logged out from Streameer.");
+        // print("Logged out from Streameer.");
       }
     };
     // Join the RTM and RTC channels
@@ -102,15 +97,14 @@ class _ParticipantState extends State<Participant> {
 
     //Callback for the RtC Channel
     _channel?.onMemberJoined = (AgoraRtmMember member) {
-      print(
-          "Member joined: " + member.userId + ', channel: ' + member.channelId);
+      // print(
+      //     "Member joined: " + member.userId + ', channel: ' + member.channelId);
     };
     _channel?.onMemberLeft = (AgoraRtmMember member) {
-      print("Member left: " + member.userId + ', channel: ' + member.channelId);
+      // print("Member left: " + member.userId + ', channel: ' + member.channelId);
     };
-    _channel?.onMessageReceived =
-        (AgoraRtmMessage message, AgoraRtmMember member) {
-      print("Public Message from " + member.userId + ": " + (message.text));
+    _channel?.onMessageReceived = (AgoraRtmMessage message, AgoraRtmMember member) {
+      // print("Public Message from " + member.userId + ": " + (message.text));
     };
   }
 
@@ -129,8 +123,7 @@ class _ParticipantState extends State<Participant> {
     return Container(
         alignment: Alignment.bottomCenter,
         padding: const EdgeInsets.symmetric(vertical: 48),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
           RawMaterialButton(
             onPressed: _onToggleMute,
             child: Icon(
@@ -191,7 +184,7 @@ class _ParticipantState extends State<Participant> {
     return Row(
       children: [
         Expanded(
-          child: RtcLocalView.SurfaceView(),
+          child: SurfaceView(),
         ),
       ],
     );
