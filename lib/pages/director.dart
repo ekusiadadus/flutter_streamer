@@ -22,18 +22,14 @@ class _DirectorState extends State<Director> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(directorController.notifier)
-        .joinCall(channelName: widget.channelName, uid: widget.uid);
+    context.read(directorController.notifier).joinCall(channelName: widget.channelName, uid: widget.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (BuildContext context,
-          T Function<T>(ProviderBase<Object?, T>) watch, Widget? child) {
-        DirectorController directorNotifier =
-            watch(directorController.notifier);
+      builder: (BuildContext context, T Function<T>(ProviderBase<Object?, T>) watch, Widget? child) {
+        DirectorController directorNotifier = watch(directorController.notifier);
         DirectorModel directorData = watch(directorController);
         Size size = MediaQuery.of(context).size;
         return Scaffold(
@@ -69,10 +65,8 @@ class _DirectorState extends State<Director> {
                     return Row(
                       children: [
                         Expanded(
-                          child: StageUser(
-                              directorData: directorData,
-                              directorNotifier: directorNotifier,
-                              index: index),
+                          child:
+                              StageUser(directorData: directorData, directorNotifier: directorNotifier, index: index),
                         ),
                       ],
                     );
@@ -80,9 +74,7 @@ class _DirectorState extends State<Director> {
                   childCount: directorData.activeUsers.length,
                 ),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: size.width / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                    maxCrossAxisExtent: size.width / 2, crossAxisSpacing: 20, mainAxisSpacing: 20),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
@@ -104,10 +96,8 @@ class _DirectorState extends State<Director> {
                     return Row(
                       children: [
                         Expanded(
-                          child: LobbyUser(
-                              directorData: directorData,
-                              directorNotifier: directorNotifier,
-                              index: index),
+                          child:
+                              LobbyUser(directorData: directorData, directorNotifier: directorNotifier, index: index),
                         ),
                       ],
                     );
@@ -115,9 +105,7 @@ class _DirectorState extends State<Director> {
                   childCount: directorData.activeUsers.length,
                 ),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: size.width / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                    maxCrossAxisExtent: size.width / 2, crossAxisSpacing: 20, mainAxisSpacing: 20),
               ),
             ],
           ),
@@ -149,14 +137,8 @@ class StageUser extends StatelessWidget {
               ? Stack(
                   children: [
                     Container(
-                      color: (directorData.lobbyUsers
-                                  .elementAt(index)
-                                  .backgroundColor !=
-                              null)
-                          ? directorData.lobbyUsers
-                              .elementAt(index)
-                              .backgroundColor!
-                              .withOpacity(1)
+                      color: (directorData.lobbyUsers.elementAt(index).backgroundColor != null)
+                          ? directorData.lobbyUsers.elementAt(index).backgroundColor!.withOpacity(1)
                           : Colors.black,
                     ),
                     const Align(
@@ -188,9 +170,7 @@ class StageUser extends StatelessWidget {
                   } else {}
                 },
                 icon: const Icon(Icons.mic_off),
-                color: directorData.activeUsers.elementAt(index).muted
-                    ? Colors.red
-                    : Colors.white,
+                color: directorData.activeUsers.elementAt(index).muted ? Colors.red : Colors.white,
               ),
               IconButton(
                 onPressed: () {
@@ -198,14 +178,11 @@ class StageUser extends StatelessWidget {
                   } else {}
                 },
                 icon: const Icon(Icons.videocam_off),
-                color: directorData.activeUsers.elementAt(index).videoDisabled
-                    ? Colors.red
-                    : Colors.white,
+                color: directorData.activeUsers.elementAt(index).videoDisabled ? Colors.red : Colors.white,
               ),
               IconButton(
                 onPressed: () {
-                  directorNotifier.demoteToLobbyUser(
-                      uid: directorData.activeUsers.elementAt(index).uid);
+                  directorNotifier.demoteToLobbyUser(uid: directorData.activeUsers.elementAt(index).uid);
                 },
                 icon: const Icon(
                   Icons.arrow_downward,
@@ -241,21 +218,14 @@ class LobbyUser extends StatelessWidget {
           child: directorData.lobbyUsers.elementAt(index).videoDisabled
               ? Stack(children: [
                   Container(
-                    color: (directorData.lobbyUsers
-                                .elementAt(index)
-                                .backgroundColor !=
-                            null)
-                        ? directorData.lobbyUsers
-                            .elementAt(index)
-                            .backgroundColor!
-                            .withOpacity(1)
+                    color: (directorData.lobbyUsers.elementAt(index).backgroundColor != null)
+                        ? directorData.lobbyUsers.elementAt(index).backgroundColor!.withOpacity(1)
                         : Colors.black,
                   ),
                   Align(
                       alignment: Alignment.center,
                       child: Text(
-                        directorData.lobbyUsers.elementAt(index).name ??
-                            "error name",
+                        directorData.lobbyUsers.elementAt(index).name ?? "error name",
                         style: const TextStyle(color: Colors.white),
                       )),
                 ])
@@ -264,15 +234,13 @@ class LobbyUser extends StatelessWidget {
                 ),
         ),
         Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: Colors.black54),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.black54),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 onPressed: () {
-                  directorNotifier.promoteToActiveUser(
-                      uid: directorData.lobbyUsers.elementAt(index).uid);
+                  directorNotifier.promoteToActiveUser(uid: directorData.lobbyUsers.elementAt(index).uid);
                 },
                 icon: const Icon(Icons.arrow_upward),
                 color: Colors.white,

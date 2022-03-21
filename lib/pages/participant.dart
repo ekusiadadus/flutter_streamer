@@ -53,8 +53,7 @@ class _ParticipantState extends State<Participant> {
   }
 
   Future<void> initializeAgora() async {
-    _engine = await RtcEngine.createWithContext(
-        RtcEngineContext(EnvironmentConfig.agoraId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(EnvironmentConfig.agoraId));
     _client = await AgoraRtmClient.createInstance(EnvironmentConfig.agoraId);
 
     await _engine.enableVideo();
@@ -104,8 +103,7 @@ class _ParticipantState extends State<Participant> {
     _channel?.onMemberLeft = (AgoraRtmMember member) {
       // print("Member left: " + member.userId + ', channel: ' + member.channelId);
     };
-    _channel?.onMessageReceived =
-        (AgoraRtmMessage message, AgoraRtmMember member) {
+    _channel?.onMessageReceived = (AgoraRtmMessage message, AgoraRtmMember member) {
       // print("Public Message from " + member.userId + ": " + (message.text));
     };
   }
@@ -125,8 +123,7 @@ class _ParticipantState extends State<Participant> {
     return Container(
         alignment: Alignment.bottomCenter,
         padding: const EdgeInsets.symmetric(vertical: 48),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
           RawMaterialButton(
             onPressed: _onToggleMute,
             child: Icon(

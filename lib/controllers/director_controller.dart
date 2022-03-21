@@ -6,8 +6,7 @@ import 'package:streamer/models/director_model.dart';
 import 'package:streamer/models/user.dart';
 import 'package:streamer/utils/const.dart';
 
-final directorController =
-    StateNotifierProvider.autoDispose<DirectorController, DirectorModel>((ref) {
+final directorController = StateNotifierProvider.autoDispose<DirectorController, DirectorModel>((ref) {
   return DirectorController(ref.read);
 });
 
@@ -16,10 +15,8 @@ class DirectorController extends StateNotifier<DirectorModel> {
   DirectorController(this.read) : super(DirectorModel());
 
   Future<void> _initialize() async {
-    RtcEngine _engine = await RtcEngine.createWithContext(
-        RtcEngineContext(EnvironmentConfig.agoraId));
-    AgoraRtmClient _client =
-        await AgoraRtmClient.createInstance(EnvironmentConfig.agoraId);
+    RtcEngine _engine = await RtcEngine.createWithContext(RtcEngineContext(EnvironmentConfig.agoraId));
+    AgoraRtmClient _client = await AgoraRtmClient.createInstance(EnvironmentConfig.agoraId);
     state = DirectorModel(engine: _engine, client: _client);
   }
 
@@ -63,8 +60,7 @@ class DirectorController extends StateNotifier<DirectorModel> {
 
     // Join the RTM and RTC channels
     await state.client?.login(null, uid.toString());
-    state =
-        state.copyWith(channel: await state.client?.createChannel(channelName));
+    state = state.copyWith(channel: await state.client?.createChannel(channelName));
     await state.channel?.join();
     await state.engine?.joinChannel(null, channelName, null, uid);
 
@@ -76,8 +72,7 @@ class DirectorController extends StateNotifier<DirectorModel> {
     state.channel?.onMemberLeft = (AgoraRtmMember member) {
       // print("Member left: " + member.userId + ', channel: ' + member.channelId);
     };
-    state.channel?.onMessageReceived =
-        (AgoraRtmMessage message, AgoraRtmMember member) {
+    state.channel?.onMessageReceived = (AgoraRtmMessage message, AgoraRtmMember member) {
       // print("Public Message from " + member.userId + ": " + (message.text));
     };
   }
