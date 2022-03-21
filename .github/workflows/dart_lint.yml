@@ -7,7 +7,7 @@ on:
     branches: [ master ]
   workflow_dispatch:
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: setup repository
