@@ -7,6 +7,5 @@ class EnvironmentConfig {
     'AGORA_CHANNEL_NAME',
     defaultValue: 'test',
   );
-  static const agoraToken =
-      String.fromEnvironment('AGORA_TOKEN', defaultValue: 'test');
+  static const agoraToken = String.fromEnvironment('AGORA_TOKEN', defaultValue: 'test');
 }
